@@ -15,16 +15,12 @@ end
 def get_artist_id(artist)
   result = connection.get("/v1/search?query=#{CGI.escape(artist)}&type=artist&offset=0&limit=1")
   items = JSON.parse(result.body).dig("artists", "items")
-  unless items
-    pp JSON.parse(result.body)
-  end
+  pp JSON.parse(result.body) unless items
   items.first["id"]
 end
 
 def get_albums(artist, artist_id = nil)
-  pp artist
   artist_id ||= get_artist_id(artist)
-  pp artist, artist_id
   result = connection.get("/v1/artists/#{artist_id}/albums?limit=30")
   items = JSON.parse(result.body).dig("items")
   # Return the same array we're putting into the artists file
