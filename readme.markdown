@@ -30,6 +30,5 @@ Use some regex to get the artists names from that HTML.
 
 ### Get list of artists
 
-[Musicbrainz API](https://musicbrainz.org/doc/MusicBrainz_API) - but actually, that does
+Using [Spotify's API](https://developer.spotify.com/console/get-artist-albums/) to get albums for each artist.
 
-https://musicbrainz.org/ws/2/
