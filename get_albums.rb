@@ -35,8 +35,8 @@ end
 # Write the headers for the csv, because we append after each call
 require "csv"
 artists = CSV.read("artists.csv").map { |r| r.first }
-album_headers = %i[title artist nbtracks released]
-CSV.open("albums.csv", "wb", {col_sep: ";"}) { |csv| csv << album_headers }
+@album_headers = %i[title artist nbtracks released]
+CSV.open("albums.csv", "wb", {col_sep: ";"}) { |csv| csv << @album_headers }
 
 all_albums = []
 artists.each do |artist|
@@ -47,6 +47,6 @@ artists.each do |artist|
 end
 
 # Honestly, this is just to make it legible for pretty printing, not really required
-albums_hash = all_albums.map { |a| album_headers.zip(a).to_h }
+albums_hash = all_albums.map { |a| @album_headers.zip(a).to_h }
 pp albums_hash
 pp "Total: Albums: #{all_albums.count}"

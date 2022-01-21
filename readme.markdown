@@ -12,10 +12,14 @@ I found [soundiiz](https://soundiiz.com/webapp/playlists) to offer what I needed
 
 So there is a process.
 
-1. use soudiiz to export a list of artists
-2. use spotify's API to create a list of the albums
-3. use soudiiz to import the albums into spotify
+1. Use soudiiz to export a list of artists
+2. Use `get_albums.rb` to get all the albums for all the artists
+3. Use `separate_albums.rb` to separate out (probable) duplicates and compilations
+4. Highly recommended - look at the `albums_processed.csv` in a spreadsheet viewer and quickly review that you aren't adding things you don't want. It's much easier to remove in a spreadsheet tool than 
+5. Use soudiiz to import the albums into Spotify. NOTE: the spreadsheet needs to be formatted exactly like the csv that's generated for soundiiz to import it - ie, with `;` separators and columns in the same order.
 
-[get_albums.rb](get_albums.rb) is the ruby file that does calls the spotify API to create a list of albums for a given list of artists.
+[get_albums.rb](get_albums.rb) is a ruby file that gets the albums for the given list of artists. It does this via the Spotify API.
+
+[separate_albums.rb](separate_albums.rb) is a ruby file that splits out duplicates and compilations.
 
 You have to put the artists in a csv file named `artists.csv` (it's gitignored). See [example-artists.csv](example-artists.csv)

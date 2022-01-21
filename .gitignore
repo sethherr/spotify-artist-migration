@@ -1,2 +1,6 @@
 artists.csv
 albums.csv
+albums_seth.csv
+albums_processed.csv
+albums_not_artists.csv
+albums_duplicated.csv
