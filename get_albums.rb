@@ -8,22 +8,30 @@ end
 artist = "shamir"
 
 # Spotify OAuth token - has no permissions (public only)
-token = "BQC4toi0285Ybg1gbM2Kw7xFVkVkS_jWH6ct3Sz8mg7LMV-3t-Cm8iQaqQIPQiYhxguCoq-ZGktrTyJRsCkKoMTm__k9GCai84NOBGhhWk5lrZ_dFMs50i7SmJjpRUzJrv7vhlbVP0ylq5Hi_J_vUOvfUIY36ZKI_WI4RWj9JvaU2JmqkTSEwPTUxnGMmIqxn2CzXkbV7ko"
+@token = "BQC4toi0285Ybg1gbM2Kw7xFVkVkS_jWH6ct3Sz8mg7LMV-3t-Cm8iQaqQIPQiYhxguCoq-ZGktrTyJRsCkKoMTm__k9GCai84NOBGhhWk5lrZ_dFMs50i7SmJjpRUzJrv7vhlbVP0ylq5Hi_J_vUOvfUIY36ZKI_WI4RWj9JvaU2JmqkTSEwPTUxnGMmIqxn2CzXkbV7ko"
 
-require 'faraday/net_http'
-Faraday.default_adapter = :net_http
+require "faraday"
 
 def connection
   Faraday.new(url: "https://api.spotify.com") do |conn|
     conn.headers["Content-Type"] = "application/json"
-    conn.headers["Authorization"] = "Bearer #{token}"
+    conn.headers["Authorization"] = "Bearer #{@token}"
     conn.adapter Faraday.default_adapter
   end
 end
 
-result = connection.get("/v1/search?query=#{artist}&type=artist&offset=0&limit=1")
+def get_artist_id(artist)
+  result = connection.get("/v1/search?query=#{artist}&type=artist&offset=0&limit=1")
+  items = JSON.parse(result.body).dig("artists", "items")
+  items.first["id"]
+end
 
-pp JSON.parse(result.body)
+def get_albums(artist_id)
+  result = connection.get("/v1/artists/#{artist_id}/albums?limit=20")
+  items = JSON.parse(result.body).dig("items")
+  items.map { |i| i["name"] }
+end
 
-# curl -X "GET" "https://api.spotify.com/v1/search?q=#{artist}&type=artist" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQCGAjlvJsRiLHWEPMyb9HXA0vR3-QjJpM7diLFvQbTONlm4bYKtJC3kFxLqmBHZZfhgF3_8Q7DchNqWDlZ_ajhkDR6CRKG6ethQ4jKFa5YQ3TVT9F7UvC8EX-rzAW862ziRKPlwAUVQYkUmFNJr7DWZAT2j-sFcf9A1z4Ld9lC3pAcyZYdsSjamVlJ9lXsb-Ug2LpeZS4g"
-# response = HTTParty.get("https://api.spotify.com/v1/search?q=#{artist}&type=artist")
+artist_id = get_artist_id(artist)
+albums = get_albums(artist_id)
+pp albums
